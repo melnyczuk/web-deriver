@@ -63,7 +63,7 @@ public class App {
 
     action.dragAndDrop(pegman, canvas).build().perform();
 
-    sleeper(3000);
+    sleeper(5000);
     return;
   }
 
@@ -74,11 +74,23 @@ public class App {
 
   private void centerMouseToCanvas() {
     WebElement canvas = find("widget-scene-canvas");
-    action.moveToElement(canvas).perform();
+    int height = (int) ((double) driver.manage().window().getSize().height * 0.1);
+    action.moveToElement(canvas).moveByOffset(0, height).build().perform();
     return;
   }
 
-  private void turn(Boolean direction) {
+  private void lilTurn(Boolean direction) {
+    int width = (int) ((double) driver.manage().window().getSize().width * 0.2);
+    int offset = direction ? -width : width; 
+    action.moveByOffset(offset, 0).perform();
+    sleeper(500);
+    walk();
+    sleeper(1000);
+    centerMouseToCanvas();
+    return;
+  }
+
+  private void bigTurn(Boolean direction) {
     WebElement arrow = find(direction ? "compass-clockwise-arrow" : "compass-counterclockwise-arrow");
     action.click(arrow).perform();
     sleeper(1000);
@@ -99,7 +111,9 @@ public class App {
     String url = String.format("https://www.google.com/maps/@%s,%s,16z", args[0], args[1]);
 
     app.driver.get(url);
-    sleeper(3000);
+    sleeper(5000);
+    app.driver.manage().window().maximize();
+    sleeper(1000);
 
     app.dragPegmanToCanvas();
     app.setLocation(getCoords(app.driver.getCurrentUrl()));
@@ -109,9 +123,7 @@ public class App {
 
       if (compareCoords(currentCoords, app.location)) {
         app.setLocation(currentCoords);
-        app.turn(Math.rint(Math.random()) == 0);
-        app.walk();
-        sleeper(2000);
+        app.lilTurn(Math.rint(Math.random()) == 0);
       }
 
       app.walk();
