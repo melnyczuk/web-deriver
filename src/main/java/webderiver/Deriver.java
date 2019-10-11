@@ -49,7 +49,7 @@ public class Deriver {
       WebElement arrow = driver.findElement(By.className(direction));
 
       action.click(arrow).perform();
-      
+
       Utils.sleeper(1000);
 
       return;
@@ -61,11 +61,7 @@ public class Deriver {
     int height = driver.manage().window().getSize().height;
     int verticalOffset = Math.toIntExact(Math.round(height * 0.05));
 
-    action
-      .moveToElement(canvas)
-      .moveByOffset(horizontalOffset, verticalOffset)
-      .click()
-      .perform();
+    action.moveToElement(canvas).moveByOffset(horizontalOffset, verticalOffset).click().perform();
 
     Utils.sleeper(1000);
 

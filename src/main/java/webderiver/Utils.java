@@ -10,7 +10,7 @@ class Utils {
   }
 
   public static Double[] parseXY(String x, String y) {
-    return new Double[] { Double.parseDouble(x),  Double.parseDouble(y) };
+    return new Double[] { Double.parseDouble(x), Double.parseDouble(y) };
   }
 
   public static Double[] parseCoords(String url) {
