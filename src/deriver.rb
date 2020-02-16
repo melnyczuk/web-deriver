@@ -11,6 +11,7 @@ class Deriver
   end
   
   def start
+    @browser.maximize
     url = BASE_URL + "@%{x},%{y},15z" % @location
     @browser.go_to(url)
     sleep 3
@@ -33,5 +34,5 @@ class Deriver
 
   def turn(ang) end
 
-  def quit() @browser.quit end
+  def fin() @browser.fin end
 end

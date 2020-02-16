@@ -1,2 +1,7 @@
 require_relative 'src/deriver'
-Deriver.new(*ARGV[0..1]).start.run.quit
+  guy_debord = Deriver.new *ARGV[0..1]
+begin
+  guy_debord.start.run.fin
+rescue
+  exit 0
+end
