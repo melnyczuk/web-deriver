@@ -1,5 +1,4 @@
 require_relative 'browser'
-
 class Deriver
   :browser
   :location
@@ -12,27 +11,28 @@ class Deriver
   
   def start
     @browser.maximize
-    url = BASE_URL + "@%{x},%{y},15z" % @location
-    @browser.go_to(url)
-    sleep 3
+    @browser.go_to url
+    sleep 5
     @browser.drag_pegman
+    sleep 3
+    @browser.click
     sleep 3
     self
   end
 
   def run 
     while true 
-      forward 10 
-    end 
+      @browser.send_key :up
+      sleep 1
+      @browser.send_key left_or_right
+      sleep 1
+    end
+    self 
   end
-    
-  def forward(dist) 
-    @browser.move(dist)
-    sleep 3
-    self
-  end
-
-  def turn(ang) end
 
   def fin() @browser.fin end
+
+  private def url() BASE_URL + "@%{x},%{y},15z" % @location end
+  private def choose() rand(2) == 1 end
+  private def left_or_right() choose ? :right : :left end
 end
