@@ -8,5 +8,6 @@ It is a technological exploration of Situationist philosophy and practice, that 
 
 ## Todo:
 - [ ] Fix 'big turn' logic for when the agent is stuck
-- [ ] Build out PsychoGeographer class to use geolocation API's to make decisions about where to go
+- [ ] Make PsychoGeographer class interface with [dowsing rod](https://github.com/melnyczuk/dowsing_rod) to make decisions about where to go
+- [ ] Make PsychoGeographer into ML python app
 - [ ] Add screen readout to display the agent's inner monologue
