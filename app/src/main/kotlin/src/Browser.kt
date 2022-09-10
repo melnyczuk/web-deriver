@@ -1,11 +1,11 @@
 package src
 
-import java.awt.Robot
 import org.openqa.selenium.By
 import org.openqa.selenium.Keys
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebDriver.Window
 import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.interactions.Actions
 
 const val CANVAS_ID = "scene"
@@ -26,10 +26,9 @@ enum class Movements {
 }
 
 class Browser {
-  private val driver: WebDriver = ChromeDriver()
+  private val driver: WebDriver = ChromeDriver(ChromeOptions().addArguments("disable-infobars"))
   private val window: Window = driver.manage().window()
   private val actions: Actions = Actions(driver)
-  private val robot: Robot = Robot()
 
   val location: Location?
     get() =
@@ -40,18 +39,19 @@ class Browser {
 
   constructor(url: String) {
     Thread.sleep(2000)
-    window.fullscreen()
-    Thread.sleep(2000)
     driver.navigate().to(url)
     Thread.sleep(5000)
     driver.findElement(By.xpath(REJECT_COOKIES_XPATH)).click()
     Thread.sleep(5000)
-    driver.findElement(By.id(PEGMAN_ID)).click()
-    driver.findElement(By.id(CANVAS_ID)).click()
-    Thread.sleep(3000)
+    window.fullscreen()
+    Thread.sleep(2000)
+    while (!driver.currentUrl.contains("t/data=")) {
+      driver.findElement(By.id(PEGMAN_ID)).click()
+      driver.findElement(By.id(CANVAS_ID)).click()
+      Thread.sleep(3000)
+    }
   }
 
-  fun clickWindowCenter(): Unit = actions.click(driver.findElement(By.id(CANVAS_ID))).perform()
   fun forward(): Unit = move(Movements.FORWARD)
   fun backward(): Unit = move(Movements.BACKWARD)
   fun left(): Unit = turn(Directions.LEFT)
@@ -64,7 +64,7 @@ class Browser {
             Movements.BACKWARD -> actions.sendKeys(Keys.DOWN)
           }
           .perform()
-          .let { Thread.sleep(1000) }
+          .let { Thread.sleep(1500) }
 
   private fun turn(direction: Directions): Unit =
       actions
@@ -74,6 +74,7 @@ class Browser {
                 Directions.RIGHT -> driver.findElement(By.xpath(RIGHT_ARROW))
               }
           )
+          .click(driver.findElement(By.id(CANVAS_ID)))
           .perform()
           .let { Thread.sleep(1000) }
 }
