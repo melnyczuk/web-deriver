@@ -8,7 +8,7 @@ class Deriver {
   private val browser: Browser
   private var location: Location
   private val isStuck: Boolean
-    get() = updateLocation()
+    get() = browser.location?.let { it.x == location.x && it.y == location.y } ?: true
 
   constructor(x: Double, y: Double) {
     location = Location(x, y)
@@ -16,30 +16,22 @@ class Deriver {
   }
 
   fun walk(): Unit {
-    if (updateLocation()) {
-      getUnstuck()
-    }
-
     browser.forward()
+    getUnstuck()
+    browser.location?.let { location = it }
   }
 
   fun getUnstuck(): Unit {
     val turn = if (Math.random() > 0.5) browser::left else browser::right
 
     while (isStuck) {
+      browser.forward()
       turn()
-      browser.clickWindowCenter()
       browser.forward()
     }
   }
 
   fun finish(): Unit = browser.finish()
-
-  fun updateLocation(): Boolean {
-    val oldLocation = location.copy()
-    browser.location?.let { location = it }
-    return oldLocation.x == location.x && oldLocation.y == location.y
-  }
 
   private fun getUrl(loc: Location): String {
     val x = loc.x
